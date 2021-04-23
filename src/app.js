@@ -6,6 +6,8 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const recipesRouter = require('./recipes/recipes-router')
 const categoriesRouter = require('./categories/categories-router')
+const tagsRouter = require('./tags/tags-router')
+const ingredientsRouter = require('./ingredients/ingredients-router')
 
 const app = express()
 
@@ -19,6 +21,8 @@ app.use(cors())
 
 app.use('/api/recipes', recipesRouter)
 app.use('/api/categories', categoriesRouter)
+app.use('/api/tags', tagsRouter)
+app.use('/api/ingredients', ingredientsRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello, world!')
