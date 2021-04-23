@@ -1,8 +1,8 @@
 INSERT INTO categories (title)
 VALUES
-    ("breakfast"),
-    ("entree"),
-    ("dessert"),
-    ("drink"),
-    ("side"),
-    ("snack");
+    ('breakfast'),
+    ('entree'),
+    ('dessert'),
+    ('drink'),
+    ('side'),
+    ('snack');
