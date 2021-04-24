@@ -8,6 +8,9 @@ const recipesRouter = require('./recipes/recipes-router')
 const categoriesRouter = require('./categories/categories-router')
 const tagsRouter = require('./tags/tags-router')
 const ingredientsRouter = require('./ingredients/ingredients-router')
+const stepsRouter = require('./steps/steps-router')
+const commentsRouter = require('./comments/comments-router')
+const recipeTagsRouter = require('./recipe-tags/recipe-tags-router')
 
 const app = express()
 
@@ -23,6 +26,9 @@ app.use('/api/recipes', recipesRouter)
 app.use('/api/categories', categoriesRouter)
 app.use('/api/tags', tagsRouter)
 app.use('/api/ingredients', ingredientsRouter)
+app.use('/api/steps', stepsRouter)
+app.use('/api/comments', commentsRouter)
+app.use('/api/recipetags', recipeTagsRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello, world!')

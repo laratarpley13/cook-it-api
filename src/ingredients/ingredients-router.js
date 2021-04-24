@@ -39,6 +39,24 @@ ingredientsRouter
     })
 
 ingredientsRouter
+    .route('/:recipeid')
+    .get((req, res, next) => {
+        IngredientsService.getIngredientsByRecipe(
+            req.app.get('db'),
+            req.params.recipeid
+        )
+            .then(ingredients => {
+                if(ingredients.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `no ingredients exist for this recipe` }
+                    })
+                }
+                res.json(ingredients)
+            })
+            .catch(next)
+    })
+
+ingredientsRouter
     .route('/:id')
     .all((req, res, next) => {
         IngredientsService.getById(
@@ -55,14 +73,6 @@ ingredientsRouter
                 next()
             })
             .catch(next)
-    })
-    .get((req, res, next) => {
-        res.json({
-            id: res.ingredient.id,
-            recipeid: res.ingredient.recipeid,
-            title: res.ingredient.title,
-            amount: res.ingredient.amount
-        })
     })
     .delete((req, res, next) => {
         IngredientsService.deleteIngredient(

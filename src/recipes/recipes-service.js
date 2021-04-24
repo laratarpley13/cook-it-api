@@ -2,12 +2,12 @@ const RecipesService = {
     getAllRecipes(knex) {
         return knex.from('recipes').select('*')
     },
-    /* getRecipesByUser(knex, userid) {
+    getRecipesByUser(knex, userid) {
         return knex.from('recipes').select('*').where('userid', userid)
     },
     getRecipesByCategory(knex, categoryid) {
         return knex.from('recipes').select('*').where('categoryid', categoryid)
-    }, */
+    },
     getById(knex, id) {
         return knex.from('recipes').select('*').where('id', id).first()
     },

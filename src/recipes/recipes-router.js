@@ -39,6 +39,42 @@ recipesRouter
     })
 
 recipesRouter
+    .route('/bycategory/:categoryid')
+    .get((req, res, next) => {
+        RecipesService.getRecipesByCategory(
+            req.app.get('db'),
+            req.params.categoryid
+        )
+            .then(recipes => {
+                if(recipes.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `no recipes exist for this category` }
+                    })
+                }
+                res.json(recipes)
+            })
+            .catch(next)
+    })
+
+recipesRouter
+    .route('/byuser/:userid')
+    .get((req, res, next) => {
+        RecipesService.getRecipesByUser(
+            req.app.get('db'),
+            req.params.userid
+        )
+            .then(recipes => {
+                if(recipes.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `No recipes exist for this user` }
+                    })
+                }
+                res.json(recipes)
+            })
+            .catch(next)
+    })
+
+recipesRouter
     .route('/:id')
     .all((req, res, next) => {
         RecipesService.getById(
