@@ -1,9 +1,22 @@
 const express = require('express');
 const RecipesService = require('./recipes-service');
+const xss = require('xss')
 //const {requireAuth} = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const recipesRouter = express.Router();
+
+const serializeRecipe = (recipe) => {
+    return {
+        id: recipe.id,
+        userid: recipe.userid,
+        categoryid: recipe.categoryid,
+        title: xss(recipe.title),
+        description: xss(recipe.description),
+        imgurl: xss(recipe.imgurl),
+        date_created: recipe.date_created
+    }
+}
 
 recipesRouter
     .route('/')
@@ -12,7 +25,7 @@ recipesRouter
             req.app.get('db')
         )
             .then(recipes => {
-                res.json(recipes)
+                res.json(recipes.map(recipe => serializeRecipe(recipe)))
             })
             .catch(next)
     })
@@ -33,7 +46,7 @@ recipesRouter
             newRecipe
         )
             .then(recipe => {
-                res.status(201).json(recipe)
+                res.status(201).json(serializeRecipe(recipe))
             })
             .catch(next)
     })
@@ -51,7 +64,7 @@ recipesRouter
                         error: { message: `no recipes exist for this category` }
                     })
                 }
-                res.json(recipes)
+                res.json(recipes.map(recipe => serializeRecipe(recipe)))
             })
             .catch(next)
     })
@@ -69,7 +82,7 @@ recipesRouter
                         error: { message: `No recipes exist for this user` }
                     })
                 }
-                res.json(recipes)
+                res.json(recipes.map(recipe => serializeRecipe(recipe)))
             })
             .catch(next)
     })
@@ -97,9 +110,9 @@ recipesRouter
             id: res.recipe.id,
             userid: res.recipe.userid,
             categoryid: res.recipe.categoryid,
-            title: res.recipe.title,
-            description: res.recipe.description,
-            imgurl: res.recipe.imgurl,
+            title: xss(res.recipe.title),
+            description: xss(res.recipe.description),
+            imgurl: xss(res.recipe.imgurl),
             date_created: res.recipe.date_created,
         })
     })

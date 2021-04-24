@@ -1,9 +1,20 @@
 const express = require('express');
+const xss = require('xss');
 const CommentsService = require('./comments-service');
 //const {requireAuth} = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const commentsRouter = express.Router();
+
+const serializeComment = (comment) => {
+    return {
+        id: comment.id,
+        recipeid: comment.recipeid,
+        userid: comment.userid,
+        comment: xss(comment.comment),
+        imgurl: xss(comment.imgurl)
+    }
+}
 
 commentsRouter
     .route('/')
@@ -12,7 +23,7 @@ commentsRouter
             req.app.get('db')
         )
             .then(comments => {
-                res.json(comments)
+                res.json(comments.map(comment => serializeComment(comment)))
             })
             .catch(next)
     })
@@ -33,7 +44,7 @@ commentsRouter
             newComment
         )
             .then(comment => {
-                res.status(201).json(comment)
+                res.status(201).json(serializeComment(comment))
             })
             .catch(next)
     })
@@ -51,7 +62,7 @@ commentsRouter
                         error: { message: `no comments exist for this recipe` }
                     })
                 }
-                res.json(comments)
+                res.json(comments.map(comment => serializeComment(comment)))
             })
             .catch(next)
     })
@@ -69,7 +80,7 @@ commentsRouter
                         error: { message: `No comments exist for this user` }
                     })
                 }
-                res.json(comments)
+                res.json(comments.map(comment => serializeComment(comment)))
             })
             .catch(next)
     })

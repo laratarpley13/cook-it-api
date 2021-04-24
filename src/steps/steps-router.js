@@ -1,9 +1,18 @@
 const express = require('express');
 const StepsService = require('./steps-service');
+const xss = require('xss');
 //const {requireAuth} = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const stepsRouter = express.Router();
+
+const serializeSteps = (step) => {
+    return {
+        id: step.id,
+        recipeid: step.recipeid,
+        text: xss(step.text)
+    }
+}
 
 stepsRouter
     .route('/')
@@ -12,7 +21,7 @@ stepsRouter
             req.app.get('db')
         )
             .then(steps => {
-                res.json(steps)
+                res.json(steps.map(step => serializeSteps(step)))
             })
             .catch(next)
     })
@@ -33,7 +42,7 @@ stepsRouter
             newStep
         )
             .then(step => {
-                res.status(201).json(step)
+                res.status(201).json(serializeStep(step))
             })
             .catch(next)
     })
@@ -51,7 +60,7 @@ stepsRouter
                         error: { message: `no steps exist for this recipe` }
                     })
                 }
-                res.json(steps)
+                res.json(steps.map(step => serializeSteps(step)))
             })
             .catch(next)
     })

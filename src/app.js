@@ -11,6 +11,8 @@ const ingredientsRouter = require('./ingredients/ingredients-router')
 const stepsRouter = require('./steps/steps-router')
 const commentsRouter = require('./comments/comments-router')
 const recipeTagsRouter = require('./recipe-tags/recipe-tags-router')
+const usersRouter = require('./users/users-router')
+const authRouter = require('./auth/auth-router')
 
 const app = express()
 
@@ -29,6 +31,8 @@ app.use('/api/ingredients', ingredientsRouter)
 app.use('/api/steps', stepsRouter)
 app.use('/api/comments', commentsRouter)
 app.use('/api/recipetags', recipeTagsRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/auth', authRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello, world!')

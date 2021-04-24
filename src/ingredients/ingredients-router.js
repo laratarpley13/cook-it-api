@@ -1,9 +1,19 @@
 const express = require('express');
 const IngredientsService = require('./ingredients-service');
+const xss = require('xss')
 //const {requireAuth} = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const ingredientsRouter = express.Router();
+
+serializeIngredient = (ingredient) => {
+    return {
+        id: ingredient.id,
+        recipeid: ingredient.recipeid,
+        title: xss(ingredient.title),
+        amount: xss(ingredient.amount)
+    }
+}
 
 ingredientsRouter
     .route('/')
@@ -12,7 +22,7 @@ ingredientsRouter
             req.app.get('db')
         )
             .then(ingredients => {
-                res.json(ingredients)
+                res.json(ingredients.map(ingredient => serializeIngredient(ingredient)))
             })
             .catch(next)
     })
@@ -33,7 +43,7 @@ ingredientsRouter
             newIngredient
         )
             .then(ingredient => {
-                res.status(201).json(ingredient)
+                res.status(201).json(serializeIngredient(ingredient))
             })
             .catch(next)
     })
@@ -51,7 +61,7 @@ ingredientsRouter
                         error: { message: `no ingredients exist for this recipe` }
                     })
                 }
-                res.json(ingredients)
+                res.json(ingredients.map(ingredient => serializeIngredient(ingredient)))
             })
             .catch(next)
     })
