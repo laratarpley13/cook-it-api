@@ -81,4 +81,34 @@ usersRouter
             })
     })
 
+usersRouter
+    .route('/all')
+    .get(requireAuth, (req, res, next) => {
+        UsersService.getAllUsers(
+            req.app.get('db')
+        )
+            .then(users => {
+                res.json(users.map(user => serializeUser(user)))
+            })
+            .catch(next)
+    })
+
+usersRouter
+    .route('/:id')
+    .get(requireAuth, (req, res, next) => {
+        UsersService.getById(
+            req.app.get('db'),
+            req.params.id
+        )
+            .then(user => {
+                if(!user) {
+                    return res.status(404).json({
+                        error: { message: `User doesn't exist` }
+                    })
+                }
+                return res.json(serializeUser(user))
+            })
+            .catch(next)
+    })
+
 module.exports = usersRouter

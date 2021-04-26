@@ -1,7 +1,7 @@
 const express = require('express');
 const xss = require('xss');
 const CommentsService = require('./comments-service');
-//const {requireAuth} = require('../middleware/jwt-auth');
+const { requireAuth } = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const commentsRouter = express.Router();
@@ -18,7 +18,7 @@ const serializeComment = (comment) => {
 
 commentsRouter
     .route('/')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         CommentsService.getAllComments(
             req.app.get('db')
         )
@@ -51,7 +51,7 @@ commentsRouter
 
 commentsRouter
     .route('/:recipeid')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         CommentsService.getCommentsByRecipe(
             req.app.get('db'),
             req.params.recipeid
@@ -69,7 +69,7 @@ commentsRouter
 
 commentsRouter
     .route('/byuser/:userid')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         CommentsService.getCommentsByUser(
             req.app.get('db'),
             req.params.userid
@@ -87,7 +87,7 @@ commentsRouter
 
 commentsRouter
     .route('/:id')
-    .all((req, res, next) => {
+    .all(requireAuth, (req, res, next) => {
         CommentsService.getById(
             req.app.get('db'),
             req.params.id

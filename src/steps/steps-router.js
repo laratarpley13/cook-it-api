@@ -1,12 +1,13 @@
 const express = require('express');
 const StepsService = require('./steps-service');
 const xss = require('xss');
+const { requireAuth } = require('../middleware/jwt-auth');
 //const {requireAuth} = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const stepsRouter = express.Router();
 
-const serializeSteps = (step) => {
+const serializeStep = (step) => {
     return {
         id: step.id,
         recipeid: step.recipeid,
@@ -16,18 +17,18 @@ const serializeSteps = (step) => {
 
 stepsRouter
     .route('/')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         StepsService.getAllSteps(
             req.app.get('db')
         )
             .then(steps => {
-                res.json(steps.map(step => serializeSteps(step)))
+                res.json(steps.map(step => serializeStep(step)))
             })
             .catch(next)
     })
-    .post(jsonParser, (req, res, next) => {
-        const { recipeid, title, amount } = req.body;
-        const newStep = { recipeid, title, amount };
+    .post(requireAuth, jsonParser, (req, res, next) => {
+        const { recipeid, text } = req.body;
+        const newStep = { recipeid, text };
 
         for (const [key, value] of Object.entries(newStep)) {
             if (value == null) {
@@ -49,7 +50,7 @@ stepsRouter
 
 stepsRouter
     .route('/:recipeid')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         StepsService.getStepsByRecipe(
             req.app.get('db'),
             req.params.recipeid
@@ -60,14 +61,14 @@ stepsRouter
                         error: { message: `no steps exist for this recipe` }
                     })
                 }
-                res.json(steps.map(step => serializeSteps(step)))
+                res.json(steps.map(step => serializeStep(step)))
             })
             .catch(next)
     })
 
 stepsRouter
     .route('/:id')
-    .all((req, res, next) => {
+    .all(requireAuth, (req, res, next) => {
         StepsService.getById(
             req.app.get('db'),
             req.params.id

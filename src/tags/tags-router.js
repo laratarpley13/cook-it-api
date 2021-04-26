@@ -1,13 +1,13 @@
 const express = require('express');
 const TagsService = require('./tags-service');
-//const {requireAuth} = require('../middleware/jwt-auth');
+const { requireAuth } = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const tagsRouter = express.Router();
 
 tagsRouter
     .route('/')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         TagsService.getAllTags(
             req.app.get('db')
         )
@@ -16,7 +16,7 @@ tagsRouter
             })
             .catch(next)
     })
-    .post(jsonParser, (req, res, next) => {
+    .post(requireAuth, jsonParser, (req, res, next) => {
         const { title } = req.body;
         const newTag = { title };
 
@@ -38,7 +38,7 @@ tagsRouter
 
 tagsRouter
     .route('/:id')
-    .all((req, res, next) => {
+    .all(requireAuth, (req, res, next) => {
         TagsService.getById(
             req.app.get('db'),
             req.params.id

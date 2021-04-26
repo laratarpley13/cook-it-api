@@ -1,13 +1,13 @@
 const express = require('express');
 const CategoriesService = require('./categories-service');
-//const {requireAuth} = require('../middleware/jwt-auth');
+const { requireAuth } = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const categoriesRouter = express.Router();
 
 categoriesRouter
     .route('/')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         CategoriesService.getAllCategories(
             req.app.get('db')
         )
@@ -16,7 +16,7 @@ categoriesRouter
             })
             .catch(next)
     })
-    .post(jsonParser, (req, res, next) => {
+    .post(requireAuth, jsonParser, (req, res, next) => {
         const { title } = req.body;
         const newCategory = { title };
 
@@ -38,7 +38,7 @@ categoriesRouter
 
 categoriesRouter
     .route('/:id')
-    .all((req, res, next) => {
+    .all(requireAuth, (req, res, next) => {
         CategoriesService.getById(
             req.app.get('db'),
             req.params.id

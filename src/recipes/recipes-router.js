@@ -1,7 +1,7 @@
 const express = require('express');
 const RecipesService = require('./recipes-service');
 const xss = require('xss')
-//const {requireAuth} = require('../middleware/jwt-auth');
+const { requireAuth } = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const recipesRouter = express.Router();
@@ -20,7 +20,7 @@ const serializeRecipe = (recipe) => {
 
 recipesRouter
     .route('/')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         RecipesService.getAllRecipes(
             req.app.get('db')
         )
@@ -29,7 +29,7 @@ recipesRouter
             })
             .catch(next)
     })
-    .post(jsonParser, (req, res, next) => {
+    .post(requireAuth ,jsonParser, (req, res, next) => {
         const { userid, categoryid, title, description, imgurl } = req.body;
         const newRecipe = { userid, categoryid, title, description, imgurl };
 
@@ -53,7 +53,7 @@ recipesRouter
 
 recipesRouter
     .route('/bycategory/:categoryid')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         RecipesService.getRecipesByCategory(
             req.app.get('db'),
             req.params.categoryid
@@ -71,7 +71,7 @@ recipesRouter
 
 recipesRouter
     .route('/byuser/:userid')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         RecipesService.getRecipesByUser(
             req.app.get('db'),
             req.params.userid
@@ -89,7 +89,7 @@ recipesRouter
 
 recipesRouter
     .route('/:id')
-    .all((req, res, next) => {
+    .all(requireAuth, (req, res, next) => {
         RecipesService.getById(
             req.app.get('db'),
             req.params.id

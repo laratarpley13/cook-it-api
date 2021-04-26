@@ -1,14 +1,14 @@
 const express = require('express');
 const RecipesService = require('../recipes/recipes-service');
 const RecipeTagsService = require('./recipe-tags-service');
-//const {requireAuth} = require('../middleware/jwt-auth');
+const { requireAuth } = require('../middleware/jwt-auth');
 const jsonParser = express.json();
 
 const recipeTagsRouter = express.Router();
 
 recipeTagsRouter
     .route('/')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         RecipeTagsService.getAllRecipeTags(
             req.app.get('db')
         )
@@ -17,9 +17,9 @@ recipeTagsRouter
             })
             .catch(next)
     })
-    .post(jsonParser, (req, res, next) => {
-        const { recipeid, title, amount } = req.body;
-        const newRecipeTag = { recipeid, title, amount };
+    .post(requireAuth, jsonParser, (req, res, next) => {
+        const { recipeid, tagid } = req.body;
+        const newRecipeTag = { recipeid, tagid };
 
         for (const [key, value] of Object.entries(newRecipeTag)) {
             if (value == null) {
@@ -33,15 +33,15 @@ recipeTagsRouter
             req.app.get('db'),
             newRecipeTag
         )
-            .then(ingredient => {
-                res.status(201).json(ingredient)
+            .then(recipeTag => {
+                res.status(201).json(recipeTag)
             })
             .catch(next)
     })
 
 recipeTagsRouter
     .route('/:recipeid')
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         RecipeTagsService.getRecipeTagsByRecipe(
             req.app.get('db'),
             req.params.recipeid
@@ -56,7 +56,7 @@ recipeTagsRouter
             })
             .catch(next)
     })
-    .delete((req, res, next) => {
+    .delete(requireAuth, (req, res, next) => {
         RecipeTagsService.deleteRecipeTagsByRecipe(
             req.app.get('db'),
             req.params.recipeid
