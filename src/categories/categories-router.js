@@ -54,12 +54,6 @@ categoriesRouter
             })
             .catch(next)
     })
-    .get((req, res, next) => {
-        res.json({
-            id: res.category.id,
-            title: res.category.title
-        })
-    })
     .delete((req, res, next) => {
         CategoriesService.deleteCategory(
             req.app.get('db'),

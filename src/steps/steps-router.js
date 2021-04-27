@@ -67,7 +67,7 @@ stepsRouter
     })
 
 stepsRouter
-    .route('/:id')
+    .route('/bystep/:id')
     .all(requireAuth, (req, res, next) => {
         StepsService.getById(
             req.app.get('db'),

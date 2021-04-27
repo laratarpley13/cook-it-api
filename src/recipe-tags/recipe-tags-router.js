@@ -56,15 +56,5 @@ recipeTagsRouter
             })
             .catch(next)
     })
-    .delete(requireAuth, (req, res, next) => {
-        RecipeTagsService.deleteRecipeTagsByRecipe(
-            req.app.get('db'),
-            req.params.recipeid
-        )
-            .then(() => {
-                res.status.end()
-            })
-            .catch(next)
-    })
 
 module.exports = recipeTagsRouter;

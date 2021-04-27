@@ -54,12 +54,6 @@ tagsRouter
             })
             .catch(next)
     })
-    .get((req, res, next) => {
-        res.json({
-            id: res.tag.id,
-            title: res.tag.title
-        })
-    })
     .delete((req, res, next) => {
         TagsService.deleteTag(
             req.app.get('db'),
