@@ -28,8 +28,8 @@ commentsRouter
             .catch(next)
     })
     .post(jsonParser, (req, res, next) => {
-        const { recipeid, title, amount } = req.body;
-        const newComment = { recipeid, title, amount };
+        const { recipeid, userid, imgurl, comment } = req.body;
+        const newComment = { recipeid, userid, imgurl, comment };
 
         for (const [key, value] of Object.entries(newComment)) {
             if (value == null) {
