@@ -1,26 +1,55 @@
-# Express Boilerplate!
+# CookIt
 
-This is a boilerplate project used for starting new projects!
+Link to live app: [https://cook-it-rho.vercel.app](https://cook-it-rho.vercel.app)
 
-## Set up
+![Alt text](https://github.com/laratarpley13/cook-it-api/blob/master/screenshots/explore-view.png)
+![Alt text](https://github.com/laratarpley13/cook-it-api/blob/master/screenshots/recipe-view.png)
+![Alt text](https://github.com/laratarpley13/cook-it-api/blob/master/screenshots/user-view.png)
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+## Motivation
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+Cooking is one of my biggest hobbies and in my free time you will often find me in the kitchen creating new recipes and experimenting in the kitchen. I've always wanted an easy way to share recipes I've created and recieve feedback in return without the pressure of maintaining and delivering recipe content through a blog of sorts. I created this app with the vision of creating a platform for other cooks to share their recipe creations and recieve constructive feedback in the form of pictures of the recipes attempts in turn, since food can be a very visual experience as well.
 
-## Scripts
+## How it works 
 
-Start the application `npm start`
+Users create accounts and post their own recipe creations for others to view. Users can browse through the explore page looking for different recipes to try, with the ability to sort by category and/or dietary needs. Once a user attempts someone else's recipe, in order to leave a comment they need to post a picture of their attempt in return, so we really get an idea of how the recipe turned out.
 
-Start nodemon for the application `npm run dev`
+### Technologies Used
 
-Run the tests `npm test`
+Client: React, ReactRouter, HTML, CSS
 
-## Deploying
+API: Node.js, Express, PostgreSQL
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's main branch.
+### API Used
+
+Link to API repo: [https://github.com/laratarpley13/cook-it-api.git](https://github.com/laratarpley13/cook-it-api.git)
+
+(NOTE: all routes except for account creation and initial sign-in require authorization)
+
+/auth route: to allow user to sign-in to their account
+
+/users route: post - to create a new user, get - to get specific user and their credentials, get all users - to get all users
+
+/categories: get all categories, post category, delete category
+
+/tags: get all tags, post new tag, delete tag
+
+/recipes route: get all recipes, get recipe by user, get recipe by category, get individual recipe, delete individual recipe, post recipe
+
+/ingredients: get all ingredients, get ingredients by recipe, post new ingredient, delete ingredient by id
+
+/steps: get all steps, get steps by recipe, post new step, delete step by id
+
+/comments: get all comments, get comments by recipe, get comments by recipe, delete comment
+
+/recipetags: get all recipe-tag pairings, get recipe-tag pairings by recipe
+
+### Features to include in future versions
+
+Rating features to up-vote or down-vote recipes/comments
+
+Sort recipes by date-added, likes, etc.
+
+Ability to edit recipe ingredients/steps by drag and drop option
+
+Confirm delete or cancel delete option when deleting recipes/comments
