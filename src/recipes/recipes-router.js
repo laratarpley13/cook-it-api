@@ -78,9 +78,7 @@ recipesRouter
         )
             .then(recipes => {
                 if(recipes.length === 0) {
-                    return res.status(404).json({
-                        error: { message: `No recipes exist for this user` }
-                    })
+                    return res.json([])
                 }
                 res.json(recipes.map(recipe => serializeRecipe(recipe)))
             })

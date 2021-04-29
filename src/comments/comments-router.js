@@ -76,9 +76,7 @@ commentsRouter
         )
             .then(comments => {
                 if(comments.length === 0) {
-                    return res.status(404).json({
-                        error: { message: `No comments exist for this user` }
-                    })
+                    return res.send([])
                 }
                 res.json(comments.map(comment => serializeComment(comment)))
             })
